@@ -8,20 +8,16 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" type="text/css" href="/resources/css/style.css" />
-    <link rel="stylesheet" type="text/css" href="/resources/css/style.css" />
     <title><s:message code="menu.register"/></title>
 </head>
 <body>
-<%@include file="menu.app"%>
+<%@include file="menu.app" %>
 
 <h2><s:message code="menu.register"/></h2>
 
 <p align="center">
-    <c:out value="${message}" />
+    <c:out value="${message }" />
 </p>
-
-
 
 <sf:form id="usersForm" action="adduser" modelAttribute="user"
          enctype="multipart/form-data" method="POST">
@@ -66,8 +62,8 @@
 
         <tr>
             <td colspan="2" align="center" bgcolor="#fff">
-                <input type="submit" value="<s:message code="button.register"/>" class="formbutton"/>
-                <input type="button" value="<s:message code="button.cancel"/>" class="formbutton"
+                <input type="submit" value="<s:message code="button.register"/>" />
+                <input type="button" value="<s:message code="button.cancel"/>"
                        onclick="window.location.href='${pageContext.request.contextPath}/'"/>
             </td>
         </tr>
