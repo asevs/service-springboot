@@ -12,7 +12,7 @@
 <body>
 <%@include file="menu.app" %>
 
-<img src="/resources/images/error.gif">
+<img src="/src/main/resources/images/error.jpeg">
 <h2>
     <s:message code="error.defaultErrorMessage"/>
 </h2>
