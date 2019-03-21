@@ -11,6 +11,7 @@
              </sec:authorize>
              <sec:authorize access="isAuthenticated()">
                 <a href="/logout"><s:message code="menu.logout"/></a>&nbsp;
+                <a href="/profile"><s:message code="menu.profile"/></a>&nbsp;
              </sec:authorize>
              </td>
      </tr>
