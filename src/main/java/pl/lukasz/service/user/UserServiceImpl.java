@@ -1,12 +1,12 @@
 package pl.lukasz.service.user;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.HashSet;
 
 @Service("userService")
 @Transactional
@@ -35,5 +35,11 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
     }
+
+    @Override
+    public void updateUserPassword(String newPassword, String email) {
+        userRepository.updateUserPassword(bCryptPasswordEncoder.encode(newPassword), email);
+    }
+
 
 }
