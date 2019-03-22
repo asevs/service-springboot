@@ -95,7 +95,13 @@
 </table>
 
 <table width="500" border="0" cellspacing="1" cellpadding="4" align="center">
+
     <tr>
+        <td align="center">
+            <input type="button" value="<s:message code="button.editProfile"/>"
+                   onclick="window.location.href='${pageContext.request.contextPath}/editprofile'"/>
+        </td>
+
         <td align="center">
             <input type="button" value="<s:message code="button.changePassword"/>" onclick="window.location.href='${pageContext.request.contextPath}/editpassword'"/>
         </td>

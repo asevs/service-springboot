@@ -13,7 +13,7 @@
 <body>
 <%@include file="menu.app" %>
 
-<h2><s:message code="button.changePassword"/></h2>
+<h2 align="center"><s:message code="button.changePassword"/></h2>
 
 <p align="center">
     <c:out value="${message }" />
