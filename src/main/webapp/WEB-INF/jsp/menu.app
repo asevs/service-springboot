@@ -1,13 +1,16 @@
 <table width="100%" border="0" cellpadding="4" cellspacing="4" class="tableMenuBg" bgcolor="#ccccee">
     <tr>
             <td align="left" window="900">
-                <a href="/"><s:message code="menu.MainPage"/></>
+                <a href="/"><s:message code="menu.MainPage"/></a>&nbsp;&nbsp;
+                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                <a href="/admin"><s:message code="menu.adminPage"/></a>
+                </sec:authorize>
              </td>
 
              <td align="left">
              <sec:authorize access="hasRole('ANONYMOUS')">
-                <a href="/login"><s:message code="menu.login"/></a>&nbsp;
-                <a href="/register"><s:message code="menu.register"/></a>&nbsp;
+                <a href="/login"><s:message code="menu.login"/></a>&nbsp;&nbsp;
+                <a href="/register"><s:message code="menu.register"/></a>&nbsp;&nbsp;
              </sec:authorize>
              <sec:authorize access="isAuthenticated()">
                 <a href="/logout"><s:message code="menu.logout"/></a>&nbsp;

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,6 +16,8 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true)
+
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -43,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()                                                            // access for everyone
                 .antMatchers("/register").permitAll()                                                         // access for everyone
                 .antMatchers("/adduser").permitAll()                                                          // access for everyone
-                .antMatchers("/admin").hasAuthority("ROLE_ADMIN")                                             // access only for admin
+                //  .antMatchers("/admin").hasAuthority("ROLE_ADMIN")                                                       // access only for admin // change access for @Secured
                 .anyRequest().authenticated()                                                                             // access only for logged-in users
                 .and().csrf().disable()
                 .formLogin()
