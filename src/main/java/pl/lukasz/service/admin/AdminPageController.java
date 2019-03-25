@@ -1,12 +1,14 @@
 package pl.lukasz.service.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.lukasz.service.user.User;
-import pl.lukasz.service.user.UserService;
 
 import javax.ws.rs.GET;
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.List;
 public class AdminPageController {
 
     @Autowired
-    private UserService userService;
+    private AdminService adminService;
 
     @GET
     @RequestMapping(value = "/admin")
@@ -25,25 +27,29 @@ public class AdminPageController {
     }
 
     @GET
-    @RequestMapping(value = "/users")
+    @RequestMapping(value = "/users/{page}")
     @Secured(value = {"ROLE_ADMIN"})
-    public String openAdminAllUsersPage(Model model) {
-        List<User> userList = getAllUsers();
+    public String openAdminAllUsersPage(@PathVariable("page") int page, Model model) {
+        Page<User> pages = getAllUsersPageable(page - 1);
+        int totalPages = pages.getTotalPages();
+        int currentPage = pages.getNumber();
+        List<User> userList = pages.getContent();
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", currentPage + 1);
         model.addAttribute("userList", userList);
         return "users";
     }
 
-    private List<User> getAllUsers() {
-        List<User> userList = userService.findAll();
-        for (User users : userList) {
+
+    private Page<User> getAllUsersPageable(int page) {
+        int elements = 2;
+        Page<User> pages = adminService.findAll(PageRequest.of(page, elements));
+        for (User users : pages) {
             int numberRole = users.getRoles().iterator().next().getId();
-            if (numberRole == 1) {
-                users.setNrRole(numberRole);
-            } else if (numberRole == 2) {
-                users.setNrRole(numberRole);
-            }
+            users.setNrRole(numberRole);
+
 
         }
-        return userList;
+        return pages;
     }
 }

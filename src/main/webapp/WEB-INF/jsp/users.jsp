@@ -8,49 +8,81 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title><s:message code="menu.users"/></title>
+    <script type="text/javascript">
+        function changeTrBg(row){
+            row.style.backgroundColor = "lightgray";
+        }
+        function defaultTrBg(row){
+            row.style.backgroundColor = "white";
+        }
+    </script>
 </head>
 <body>
 <%@include file="menu.app" %>
 <h1><s:message code="menu.users"/></h1>
 
-<table width="1000" border="0" cellpadding="6" cellspacing="0">
-    <tr>
-        <td width="40" align="center"><s:message code="admin.user.id"/></td>
-        <td width="200" align="center"><s:message code="register.name"/></td>
-        <td width="200" align="center"><s:message code="register.lastName"/></td>
-        <td width="220" align="center"><s:message code="register.email"/></td>
-        <td width="90" align="center"><s:message code="profil.czyAktywny"/></td>
-        <td width="200" align="center"><s:message code="profil.role"/></td>
-    </tr>
-    <c:forEach var="u" items="${userList }">
+<div align="center">
+    <table width="1000" border="0" cellpadding="6" cellspacing="0">
         <tr>
-            <td><c:out value="${u.id }" /></td>
-            <td><c:out value="${u.name }" /></td>
-            <td><c:out value="${u.lastName }" /></td>
-            <td><c:out value="${u.email }" /></td>
-            <td>
-                <c:choose>
-                    <c:when test="${u.active == 1 }">
-                        <font color="green"><s:message code="word.yes"/></font>
-                    </c:when>
-                    <c:otherwise>
-                        <font color="red"><s:message code="word.no"/></font>
-                    </c:otherwise>
-                </c:choose>
-            </td>
-            <td>
-                <c:choose>
-                    <c:when test="${u.nrRole == 1 }">
-                        <font color="green"><s:message code="word.admin"/></font>
-                    </c:when>
-                    <c:otherwise>
-                        <s:message code="word.user"/>
-                    </c:otherwise>
-                </c:choose>
+            <td width="40" align="center"></td>
+            <td width="40" align="center"><b><s:message code="admin.user.id"/></b></td>
+            <td width="200" align="center"><b><s:message code="register.name"/></b></td>
+            <td width="200" align="center"><b><s:message code="register.lastName"/></b></td>
+            <td width="220" align="center"><b><s:message code="register.email"/></b></td>
+            <td width="100" align="center"><b><s:message code="profil.czyAktywny"/></b></td>
+            <td width="200" align="center"><b><s:message code="profil.role"/></b></td>
+        </tr>
+        <c:forEach var="u" items="${userList }">
+
+            <tr onmouseover="changeTrBg(this)" onmouseout="defaultTrBg(this)">
+                <td align="right"><c:out value="${count }"/></td>
+                <td align="right"><c:out value="${u.id }" /></td>
+                <td align="left"><c:out value="${u.name }" /></td>
+                <td align="left"><c:out value="${u.lastName }" /></td>
+                <td align="center"><c:out value="${u.email }" /></td>
+                <td align="center">
+                    <c:choose>
+                        <c:when test="${u.active == 1 }">
+                            <font color="green"><s:message code="word.yes"/></font>
+                        </c:when>
+                        <c:otherwise>
+                            <font color="red"><s:message code="word.no"/></font>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+                <td align="center">
+                    <c:choose>
+                        <c:when test="${u.nrRole == 1 }">
+                            <font color="green"><s:message code="word.admin"/></font>
+                        </c:when>
+                        <c:otherwise>
+                            <s:message code="word.user"/>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
+    <table width="1000" border="0" cellpadding="6" cellspacing="0">
+        <tr>
+            <td align="right">
+
+                <c:if test="${currentPage > 1}">
+                    <input type="button"
+                           onclick="window.location.href='${pageContext.request.contextPath}/users/${currentPage - 1}'"
+                           value="<s:message code="link.back"/>"/>&nbsp;&nbsp;
+                </c:if>
+
+                <c:if test="${currentPage < totalPages}">
+                    <input type="button"
+                           onclick="window.location.href='${pageContext.request.contextPath}/users/${currentPage + 1}'"
+                           value="<s:message code="link.next"/>"/>
+                </c:if>
+
             </td>
         </tr>
-    </c:forEach>
+    </table>
 
-</table>
+</div>
 </body>
 </html>
