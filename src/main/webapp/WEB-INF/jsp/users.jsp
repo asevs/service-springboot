@@ -35,11 +35,12 @@
         <c:forEach var="u" items="${userList }">
 
             <tr onmouseover="changeTrBg(this)" onmouseout="defaultTrBg(this)">
-                <td align="right"><c:out value="${count }"/></td>
-                <td align="right"><c:out value="${u.id }" /></td>
-                <td align="left"><c:out value="${u.name }" /></td>
-                <td align="left"><c:out value="${u.lastName }" /></td>
-                <td align="center"><c:out value="${u.email }" /></td>
+                <td align="right"><c:out value="${licznik }"/></td>
+                <td align="right"><a href="edit/${u.id }"><c:out value="${u.id }" /></a></td>
+                <td align="left"><a href="edit/${u.id }"><c:out value="${u.name }" /></a></td>
+                <td align="left"><a href="edit/${u.id }"><c:out value="${u.lastName }" /></a></td>
+                <td align="center"><a href="edit/${u.id }"><c:out value="${u.email }" /></a></td>
+                <td align="center">
                 <td align="center">
                     <c:choose>
                         <c:when test="${u.active == 1 }">

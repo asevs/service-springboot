@@ -8,4 +8,6 @@ import pl.lukasz.service.user.User;
 public interface AdminService {
 
     Page<User> findAll(Pageable pageable);
+    User findUserByID(int id);
+    void updateUser(int id, int nrRole, int activity);
 }
