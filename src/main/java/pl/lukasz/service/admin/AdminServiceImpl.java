@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lukasz.service.user.User;
 
+import java.util.List;
+
 @Service("adminService")
 @Transactional
 public class AdminServiceImpl implements AdminService {
@@ -30,6 +32,12 @@ public class AdminServiceImpl implements AdminService {
     public void updateUser(int id, int nrRole, int activity) {
         adminRepository.updateActivationUser(activity, id);
         adminRepository.updateRoleUser(nrRole,id);
+    }
+
+    @Override
+    public List<User> findAllSearch(String param) {
+        List<User> userList = adminRepository.findAllSearch(param);
+        return userList;
     }
 
 

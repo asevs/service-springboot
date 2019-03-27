@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.lukasz.service.user.User;
 
+import java.util.List;
+
 @Repository("adminRepository")
 public interface AdminRepository extends JpaRepository<User, Integer> {
 
@@ -21,5 +23,7 @@ public interface AdminRepository extends JpaRepository<User, Integer> {
     @Query(value = "UPDATE user_role r SET r.role_id = :roleID where r.user_id= :id", nativeQuery = true)
     void updateRoleUser(@Param("roleID") int nrRole, @Param("id") int id);
 
+    @Query(value = "SELECT * FROM user u WHERE u.name LIKE %:param% OR u.last_name LIKE %:param% OR email LIKE %:param%", nativeQuery = true)
+    List<User> findAllSearch(@Param("param") String param);
 
 }

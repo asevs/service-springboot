@@ -77,10 +77,10 @@ public class AdminPageController {
     @POST
     @RequestMapping(value = "updateuser/{id}")
     @Secured(value = {"ROLE_ADMIN"})
-    public String updateUser(@PathVariable("id") int id, User user){
+    public String updateUser(@PathVariable("id") int id, User user) {
         int nrRole = user.getNrRole();
         int orActive = user.getActive();
-        adminService.updateUser(id,nrRole,orActive);
+        adminService.updateUser(id, nrRole, orActive);
         return "redirect:/users/1";
     }
 
@@ -110,5 +110,19 @@ public class AdminPageController {
 
         }
         return pages;
+    }
+
+
+    @GET
+    @RequestMapping(value = "users/search/{searchWord}")
+    @Secured(value = "ROLE_ADMIN")
+    public String openSearchUsersPage(@PathVariable("searchWord") String searchWord, Model model) {
+        List<User> userList = adminService.findAllSearch(searchWord);
+        for (User users : userList) {
+            int numerRole = users.getRoles().iterator().next().getId();
+            users.setNrRole(numerRole);
+        }
+        model.addAttribute("userList", userList);
+        return "usersearch";
     }
 }
