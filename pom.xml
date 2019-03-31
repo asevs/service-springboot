@@ -27,6 +27,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jersey</artifactId>
@@ -90,6 +91,8 @@
         </dependency>
 
 
+
+
         <!-- TESTY -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -106,11 +109,8 @@
             <artifactId>lombok</artifactId>
             <version>1.18.2</version>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.2</version>
-        </dependency>
+
+
     </dependencies>
 
     <build>

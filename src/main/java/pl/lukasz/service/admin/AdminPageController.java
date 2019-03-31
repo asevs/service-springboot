@@ -9,10 +9,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import pl.lukasz.service.user.User;
+import pl.lukasz.service.utilities.UserUtilities;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -41,7 +49,7 @@ public class AdminPageController {
     @RequestMapping(value = "/users/{page}")
     @Secured(value = {"ROLE_ADMIN"})
     public String openAdminAllUsersPage(@PathVariable("page") int page, Model model) {
-        Page<User> pages = getAllUsersPageable(page - 1);
+        Page<User> pages = getAllUsersPageable(page - 1,false,null);
         int totalPages = pages.getTotalPages();
         int currentPage = pages.getNumber();
         List<User> userList = pages.getContent();
@@ -100,29 +108,74 @@ public class AdminPageController {
         return roleMap;
     }
 
-    private Page<User> getAllUsersPageable(int page) {
-        int elements = 2;
-        Page<User> pages = adminService.findAll(PageRequest.of(page, elements));
+    private Page<User> getAllUsersPageable(int page, boolean search, String param) {
+        Page<User> pages;
+        if (!search) {
+            pages = adminService.findAll(PageRequest.of(page, ELEMENTS));
+        } else {
+            pages = adminService.findAllSearch(param, PageRequest.of(page, ELEMENTS));
+        }
         for (User users : pages) {
-            int numberRole = users.getRoles().iterator().next().getId();
-            users.setNrRole(numberRole);
-
-
+            int numerRole = users.getRoles().iterator().next().getId();
+            users.setNrRole(numerRole);
         }
         return pages;
     }
 
+    @GET
+    @RequestMapping(value = "/users/importusers")
+    @Secured(value = "ROLE_ADMIN")
+    public String showUsersUploadPageFromXML(Model model){
+        return "importusers";
+    }
 
     @GET
-    @RequestMapping(value = "users/search/{searchWord}")
+    @RequestMapping(value = "/users/search/{searchWord}/{page}")
     @Secured(value = "ROLE_ADMIN")
-    public String openSearchUsersPage(@PathVariable("searchWord") String searchWord, Model model) {
-        List<User> userList = adminService.findAllSearch(searchWord);
-        for (User users : userList) {
-            int numerRole = users.getRoles().iterator().next().getId();
-            users.setNrRole(numerRole);
-        }
+    public String openSearchUsersPage(@PathVariable("searchWord") String searchWord,
+                                      @PathVariable("page") int page, Model model) {
+        Page<User> pages = getAllUsersPageable(page - 1, true, searchWord);
+        int totalPages = pages.getTotalPages();
+        int currentPage = pages.getNumber();
+        List<User> userList = pages.getContent();
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", currentPage + 1);
+        model.addAttribute("userList", userList);
+        model.addAttribute("recordStartCounter", currentPage * ELEMENTS);
+        model.addAttribute("searchWord", searchWord);
         model.addAttribute("userList", userList);
         return "usersearch";
     }
+
+
+
+    @POST
+    @RequestMapping(value = "/users/upload")
+    @Secured(value = "ROLE_ADMIN")
+    public String importUsersFromXML(@RequestParam("filename")MultipartFile multipartFile) {
+        String uploadDir = System.getProperty("user.dir") + "/uploads";
+        File file;
+        try {
+            file = new File(uploadDir);
+            if (!file.exists()) {
+                file.mkdir();
+            }
+            Path fileAndPath = Paths.get(uploadDir, multipartFile.getOriginalFilename());
+            Files.write(fileAndPath, multipartFile.getBytes());
+            file = new File(fileAndPath.toString());
+            List<User> userList = UserUtilities.userDataLoader(file);
+
+            adminService.insertInBatch(userList);
+            adminService.saveAll(userList);
+            file.delete();
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return "redirect:/users/1";
+    }
+
+
+
 }

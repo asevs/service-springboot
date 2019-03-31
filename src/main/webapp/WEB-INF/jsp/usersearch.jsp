@@ -8,6 +8,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css" />
     <title><s:message code="menu.users"/></title>
     <script type="text/javascript">
         function changeTrBg(row){
@@ -16,15 +17,17 @@
         function defaultTrBg(row){
             row.style.backgroundColor = "white";
         }
-        function startSerach(){
+        function startSerach(pParam){
             var searchWord = document.getElementById('searchString').value;
-
-            if(searchWord.length < 3){
-                document.getElementById("errorSearch").innerHTML = "<s:message code="search.errorSearchString"/>";
-                return false;
+            var page = parseInt(document.getElementById('cp').value) + parseInt(pParam);
+            if (pParam == 0) {
+                if(searchWord.length < 1){
+                    document.getElementById("errorSearch").innerHTML = "<s:message code="error.userPasswordIsNotMatch"/>";
+                    return false;
+                }
             } else {
                 document.getElementById("errorSearch").innerHTML = "";
-                var searchLink = '${pageContext.request.contextPath}/users/search/' + searchWord;
+                var searchLink = '${pageContext.request.contextPath}/users/search/' + searchWord + '/' + page;
                 window.location.href=searchLink;
             }
         }
@@ -32,12 +35,14 @@
 </head>
 <body>
 <%@include file="menu.app" %>
-<h1><s:message code="menu.users"/></h1>
+<h2><s:message code="menu.users"/></h2>
 <c:set var="licznik" value="${recordStartCounter }"/>
 <div align="center">
     <div align="right" style="width: 1000px; padding: 2px;">
-        <input type="text" id="searchString"/>&nbsp;&nbsp;<input type="button" value="<s:message code="button.search"/>"
-                                                                 onclick="startSerach();"/><br/>
+        <input type="hidden" name="cp" id="cp" value="${currentPage}"/>
+        <input type="text" id="searchString" value="${searchWord}" readonly="readonly"/>&nbsp;&nbsp;
+        <input type="button" value="<s:message code="button.search"/>"
+               onclick="startSerach(0);"/><br/>
         <span id="errorSearch" style="color: red;"></span>
     </div>
     <table width="1000" border="0" cellpadding="6" cellspacing="2">
@@ -71,7 +76,7 @@
                 <td align="center">
                     <c:choose>
                         <c:when test="${u.nrRole == 1 }">
-                            <font color="green"><s:message code="word.admin"/></font>
+                            <font color="green"><s:message code="word.yes"/></font>
                         </c:when>
                         <c:otherwise>
                             <s:message code="word.user"/>
@@ -89,15 +94,11 @@
             <td align="right">
 
                 <c:if test="${currentPage > 1}">
-                    <input type="button"
-                           onclick="window.location.href='${pageContext.request.contextPath}/users/${currentPage - 1}'"
-                           value="<s:message code="link.back"/>"/>&nbsp;&nbsp;
+                    <input type="button" onclick="startSerach(-1);" value="<s:message code="link.back"/>"/>&nbsp;&nbsp;
                 </c:if>
 
                 <c:if test="${currentPage < totalPages}">
-                    <input type="button"
-                           onclick="window.location.href='${pageContext.request.contextPath}/users/${currentPage + 1}'"
-                           value="<s:message code="link.next"/>"/>
+                    <input type="button" onclick="startSerach(1);" value="<s:message code="link.next"/>"/>
                 </c:if>
 
             </td>

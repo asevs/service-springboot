@@ -1,5 +1,7 @@
 package pl.lukasz.service.user;
 
+
+
 import lombok.Data;
 
 import javax.persistence.*;

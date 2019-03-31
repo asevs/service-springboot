@@ -12,5 +12,8 @@ public interface AdminService {
     Page<User> findAll(Pageable pageable);
     User findUserByID(int id);
     void updateUser(int id, int nrRole, int activity);
-    List<User> findAllSearch(String param);
+
+    Page<User> findAllSearch(String param, Pageable pageable);
+    void insertInBatch(List<User> userList);
+    void saveAll(List<User> userList);
 }
